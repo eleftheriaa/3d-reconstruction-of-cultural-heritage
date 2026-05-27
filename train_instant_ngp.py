@@ -15,9 +15,23 @@ from nerfstudio.engine.trainer import TrainerConfig
 from nerfstudio.models.instant_ngp import InstantNGPModelConfig
 from nerfstudio.pipelines.base_pipeline import VanillaPipelineConfig
 
+# Root dataset folder
+root = "dataset"
+img = "images"
+subset = "All_faces_sculpted_primitve"
+example = ""
+
+# Combine into full path
+datapath = Path(root) / img / subset / example
+
+print("Full datapath:", datapath)
+
+# Construct experiment name as subset/example
+experiment_name = f"{root}/{img}/{subset}/{example}"
+
 # --- Dataparser ---
 dataparser_config = ColmapDataParserConfig(
-    data=Path("cube"),
+    data=datapath,
     scale_factor=1.0,
     scene_scale= 1.0, 
     downscale_factor=1,
@@ -34,8 +48,9 @@ dataparser_config = ColmapDataParserConfig(
 
 # --- Full config ---
 config = TrainerConfig(
-    experiment_name="cube-ngp-eval-interval-8-near35-far55-athre1e-3-grid-lvs-4",
-    method_name="instant-ngp",
+    experiment_name=experiment_name,
+    project_name="shrec",
+    method_name="instant_ngp",
     steps_per_eval_image=200,
     steps_per_save=500,
     save_only_latest_checkpoint=False,
