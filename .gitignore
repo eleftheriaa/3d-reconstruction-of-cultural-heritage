@@ -1,5 +1,6 @@
-*.txt
-*.png
+# *.txt
+# *.png
+outputs/
 *.json
 *.ckpt
 *.log
