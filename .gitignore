@@ -1,0 +1,7 @@
+*.txt
+*.png
+*.json
+*.ckpt
+*.log
+*.yml
+*.wandb
