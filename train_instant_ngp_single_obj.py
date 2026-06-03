@@ -84,7 +84,7 @@ config = TrainerConfig(
 )
 
 # --- Setup and train ---
-config.set_timestamp()
+# config.set_timestamp()
 config.pipeline.model.device = "cuda"
 config.pipeline.datamanager.dataparser.data = Path("dataset/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all_realistic.obj")  # redundant but explicit
 config.save_config()

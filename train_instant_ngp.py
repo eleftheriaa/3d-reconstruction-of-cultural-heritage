@@ -17,7 +17,7 @@ from nerfstudio.pipelines.base_pipeline import VanillaPipelineConfig
 
 # Root dataset folder
 root = Path("dataset")
-subset = "All_faces_sculpted_primitive"
+subset = "All_faces_sculpted_derivatives"
 
 # Folder containing all objects
 subset_path = root / subset
@@ -33,7 +33,7 @@ for obj_path in object_folders:
 
     datapath = obj_path
 
-    experiment_name = f"{obj_path.name}"
+    experiment_name = f"{subset}"
 
     # --- Dataparser ---
     dataparser_config = ColmapDataParserConfig(
@@ -53,8 +53,9 @@ for obj_path in object_folders:
     # --- Full config ---
     config = TrainerConfig(
         experiment_name=experiment_name,
-        project_name="shrec",
-        method_name=f"{subset}",
+        project_name="shrec_1",
+        method_name= f'{obj_path.name}',
+        timestamp = "",
         steps_per_eval_image=1000,
         steps_per_save=1000,
         save_only_latest_checkpoint=False,
@@ -104,7 +105,7 @@ for obj_path in object_folders:
     )
 
     # --- Setup and train ---
-    config.set_timestamp()
+    # config.set_timestamp()
     config.pipeline.model.device = "cuda"
     config.save_config()
 
