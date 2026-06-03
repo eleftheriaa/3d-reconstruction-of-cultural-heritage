@@ -1,7 +1,6 @@
-@echo off
 
-call C:\Users\VVR\anaconda3\Scripts\activate.bat
-call conda activate nerfstudio
+C:\Users\VVR\anaconda3\Scripts\activate.bat
+conda activate nerfstudio
 
 set CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8
 
