@@ -1,8 +1,10 @@
 # *.txt
 # *.png
-outputs/
+*.ply
 *.json
 *.ckpt
 *.log
 *.yml
 *.wandb
+outputs/
+dataset/All_faces_sculpted_derivatives/
