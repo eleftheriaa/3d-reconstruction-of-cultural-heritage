@@ -14,41 +14,41 @@ from nerfstudio.pipelines.base_pipeline import VanillaPipelineConfig
 # NOTE: splatfacto works best with COLMAP points for Gaussian initialization.
 # The ColmapDataParserConfig will automatically load 3D points if available.
 dataparser_config = ColmapDataParserConfig(
-    data=Path("cube"),
+    data=Path("dataset/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all.obj"),
     scale_factor=1.0,
     scene_scale=1.0,
     downscale_factor=1,
-    load_3D_points=True,           # important: seeds Gaussians from SfM points
+    load_3D_points=False,           # important: seeds Gaussians from SfM points
     orientation_method="none",
     center_method="none",
     auto_scale_poses=False,
 )
-
 # --- Full config ---
 config = TrainerConfig(
-    method_name="splatfacto",
-    experiment_name=None,
+    method_name="90_1920x1080_relief_heightmap_1_all.obj",
+    experiment_name="All_faces_sculpted_primitive",
+    project_name = "shrec_1_splatfacto",
     steps_per_save=2000,
-    steps_per_eval_batch=0,
-    steps_per_eval_image=100,
-    steps_per_eval_all_images=1000,
-    max_num_iterations=30000,
+    # steps_per_eval_batch=0,
+    steps_per_eval_image=200,
+    # steps_per_eval_all_images=1000,
+    max_num_iterations=20000,
     mixed_precision=False,
     use_grad_scaler=False,
     save_only_latest_checkpoint=True,
-    vis="viewer",
+    vis="wandb",
 
-    viewer=ViewerConfig(
-        websocket_port_default=7007,
-        num_rays_per_chunk=32768,
-        max_num_display_images=512,
-        quit_on_train_completion=False,
-        image_format="jpeg",
-        jpeg_quality=75,
-        make_share_url=False,
-        camera_frustum_scale=0.1,
-        default_composite_depth=True,
-    ),
+    # viewer=ViewerConfig(
+    #     websocket_port_default=7007,
+    #     num_rays_per_chunk=32768,
+    #     max_num_display_images=512,
+    #     quit_on_train_completion=False,
+    #     image_format="jpeg",
+    #     jpeg_quality=75,
+    #     make_share_url=False,
+    #     camera_frustum_scale=0.1,
+    #     default_composite_depth=True,
+    # ),
 
     pipeline=VanillaPipelineConfig(
 
@@ -72,11 +72,10 @@ config = TrainerConfig(
             warmup_length=500,
             refine_every=100,
             resolution_schedule=3000,
-            background_color="random",
+            background_color="white",
             num_downscales=2,
             cull_alpha_thresh=0.005,
             cull_scale_thresh=0.5,
-            continue_cull_post_densification=False,
             reset_alpha_every=30,
             densify_grad_thresh=0.0006,
             densify_size_thresh=0.01,
@@ -85,7 +84,7 @@ config = TrainerConfig(
             cull_screen_size=0.15,
             split_screen_size=0.05,
             stop_screen_size_at=4000,
-            random_init=False,
+            random_init=True,
             num_random=50000,
             random_scale=10.0,
             ssim_lambda=0.2,
@@ -163,7 +162,7 @@ config = TrainerConfig(
 
 # --- Setup and train ---
 config.set_timestamp()
-config.pipeline.datamanager.dataparser.data = Path("cube")
+config.pipeline.datamanager.dataparser.data = Path("dataset/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all.obj")
 config.save_config()
 
 trainer = config.setup(local_rank=0, world_size=1)
