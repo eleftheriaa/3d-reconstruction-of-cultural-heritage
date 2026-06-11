@@ -1,6 +1,7 @@
 
 C:\Users\VVR\anaconda3\Scripts\activate.bat
 conda activate nerfstudio
+cd/d G:\elefth\NeRF\3d-reconstruction-of-cultural-heritage
 
 set CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8
 

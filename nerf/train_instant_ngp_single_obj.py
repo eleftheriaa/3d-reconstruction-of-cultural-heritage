@@ -15,6 +15,7 @@ from nerfstudio.engine.trainer import TrainerConfig
 from nerfstudio.models.instant_ngp import InstantNGPModelConfig
 from nerfstudio.pipelines.base_pipeline import VanillaPipelineConfig
 
+
 # --- Dataparser ---
 dataparser_config = ColmapDataParserConfig(
     data=Path("dataset/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all_realistic.obj"),

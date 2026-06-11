@@ -7,4 +7,6 @@
 *.yml
 *.wandb
 outputs/
+splatfacto/
+exports/
 dataset/All_faces_sculpted_derivatives/

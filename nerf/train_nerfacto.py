@@ -24,9 +24,9 @@ from nerfstudio.configs.method_configs import method_configs
 from pathlib import Path
 
 # Root dataset folder
-root = "shrec_10"
-subset = "All_faces_sculpted_primitve"
-example = ""
+root = "dataset"
+subset = "All_faces_sculpted_derivatives"
+example = "90_1920x1080_relief_heightmap_1_all_cone.obj"
 
 # Combine into full path
 datapath = Path(root) / subset / example
@@ -34,7 +34,7 @@ datapath = Path(root) / subset / example
 print("Full datapath:", datapath)
 
 # Construct experiment name as subset/example
-experiment_name = f"{root}/{subset}/{example}"
+experiment_name = f"{subset}/{example}"
 
 dataparser_config = ColmapDataParserConfig(
     data=datapath,
@@ -46,14 +46,18 @@ dataparser_config = ColmapDataParserConfig(
     orientation_method="none",
     center_method="none",
     auto_scale_poses=False,
-    eval_mode='all', 
-)
+    # eval_mode='all', 
+    eval_mode="interval",
+    eval_interval=8,
+    )
 
 config = TrainerConfig(
     experiment_name=experiment_name,
-    project_name="shrec",
+    project_name="shrec_1_nerfacto",
     method_name="nerfacto",
-    steps_per_eval_batch=20,
+    timestamp = "",
+    output_dir=Path("nerf/outputs/"),
+    # steps_per_eval_batch=20,
     steps_per_eval_image=200,
     max_num_iterations=10000, 
     mixed_precision=True,
@@ -68,7 +72,7 @@ config = TrainerConfig(
             far_plane=6,
             proposal_initial_sampler="uniform",
             eval_num_rays_per_chunk=8192,
-            average_init_density=0.01,
+            average_init_density=0.07,
             camera_optimizer=CameraOptimizerConfig(mode="off"),
             background_color="white", 
         ),
@@ -87,7 +91,6 @@ config = TrainerConfig(
     vis="wandb",
 )
 
-config.set_timestamp()
 config.save_config()
 
 trainer = config.setup(local_rank=0, world_size=1)

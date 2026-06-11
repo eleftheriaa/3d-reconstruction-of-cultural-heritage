@@ -6,9 +6,10 @@ import numpy as np
 # 2026-04-02_001758
 # outputs\instant-ngp-scene-scale05-grid-1\2048\2026-05-21_164829
 # G:\elefth\shrec\eythimis\outputs\dataset\nerfacto\2026-04-02_110514\config.yml
-config_file = Path("outputs/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all_large.obj/2026-05-29_112442/config.yml")
+# "G:\elefth\NeRF\3d-reconstruction-of-cultural-heritage\splatfacto\All_faces_sculpted_primitive\90_1920x1080_relief_heightmap_1_all.obj\config.yml"
+config_file = Path("outputs\All_faces_sculpted_derivatives\90_1920x1080_relief_heightmap_1_all_cone.obj\config.yml")
 config = yaml.load(config_file.read_text(), Loader=yaml.Loader)   
-config.load_dir = Path("outputs/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all_large.obj/2026-05-29_112442/nerfstudio_models/")
+config.load_dir = Path("outputs\All_faces_sculpted_derivatives\90_1920x1080_relief_heightmap_1_all_cone.obj/nerfstudio_models/")
 # config.load_step = None
 config.print_to_terminal()    
 
@@ -69,9 +70,9 @@ extent = np.max(bbox.get_extent())
 
 print("Scene extent:", extent)
 
-VOXEL_SIZE = extent / 800
-NORMAL_RADIUS = extent / 150
-DBSCAN_EPS = extent / 120
+VOXEL_SIZE = extent / 1000
+NORMAL_RADIUS = extent / 500
+DBSCAN_EPS = extent / 100
 RADIUS_OUTLIER = extent / 100
 
 print("VOXEL_SIZE:", VOXEL_SIZE)
@@ -177,8 +178,8 @@ else:
 # ============================================================
 
 output_path = Path(
-    "pcds/All_faces_sculpted_primitive/"
-    "90_1920x1080_relief_heightmap_1_all_large_clean.ply"
+    "nerf/pcds/instant-ngp/All_faces_sculpted_derivatives/"
+    "90_1920x1080_relief_heightmap_1_all_cone_clean.ply"
 )
 
 o3d.io.write_point_cloud(str(output_path), pcd)

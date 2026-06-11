@@ -1,8 +1,22 @@
 # load_dir=Path("outputs\instant-ngp\2048\2026-05-21_102256\nerfstudio_models"),
 # load_step=5000,
 # C:\Users\vvr\anaconda3\Scripts\activate.bat nerfstudio
-# G:
-# cd elefth/shrec/instant-ngp
+# cd /d G:/elefth/shrec/instant-ngp
+from pathlib import Path
+
+folder = Path(
+    "dataset/All_faces_sculpted_derivatives/"
+    "90_1920x1080_relief_heightmap_1_all_cone.obj/"
+    "inpainting_images"
+)
+
+files = sorted(folder.glob("*.png"))
+
+print(len(files))
+
+for f in files[-10:]:
+    print(f.name)
+
 
 from pathlib import Path
 
@@ -33,11 +47,12 @@ for obj_path in object_folders:
 
     datapath = obj_path
 
-    experiment_name = f"{subset}"
+    experiment_name = f"{subset}_inpaint"
 
     # --- Dataparser ---
     dataparser_config = ColmapDataParserConfig(
         data=datapath,
+        images_path = Path("inpainting_images"),
         scale_factor=1.0,
         scene_scale=1.0,
         downscale_factor=1,
@@ -53,10 +68,11 @@ for obj_path in object_folders:
     # --- Full config ---
     config = TrainerConfig(
         experiment_name=experiment_name,
-        project_name="shrec_1",
+        project_name="shrec_1_instant_ngp_masked",
         method_name= f'{obj_path.name}',
         timestamp = "",
-        steps_per_eval_image=1000,
+        output_dir=Path("nerf/outputs/"),
+        steps_per_eval_image=200,
         steps_per_save=1000,
         save_only_latest_checkpoint=False,
         max_num_iterations=15000,
