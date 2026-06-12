@@ -6,7 +6,8 @@
 *.log
 *.yml
 *.wandb
-outputs/
+nerfacto_outputs/
+instant_ngp_outputs/
 splatfacto/
 exports/
 dataset/All_faces_sculpted_derivatives/

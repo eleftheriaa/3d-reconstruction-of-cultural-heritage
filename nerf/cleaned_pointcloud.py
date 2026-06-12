@@ -35,7 +35,7 @@ object_center = closest_points.mean(axis=0)
 print(f"Object center: {object_center}")
 
 # --- Build OrientedBox (axis-aligned, no rotation) ---
-half_extent = np.array([1.0, 1.0, 1.0])  # same as your bbox logic
+half_extent = np.array([0.53, 0.53, 0.53])  # same as your bbox logic
 
 crop_obb = OrientedBox(
     R=torch.eye(3),                                        # no rotation = axis aligned
@@ -44,7 +44,7 @@ crop_obb = OrientedBox(
 )
 # --- Generate point cloud with crop ---
 pcd = generate_point_cloud(
-    pipeline=trainer.pipeline,
+    pipeline=pipeline,
     num_points=1000000,
     remove_outliers=True,
     estimate_normals=False,
@@ -70,10 +70,10 @@ extent = np.max(bbox.get_extent())
 
 print("Scene extent:", extent)
 
-VOXEL_SIZE = extent / 1000
+VOXEL_SIZE = extent / 800
 NORMAL_RADIUS = extent / 500
 DBSCAN_EPS = extent / 100
-RADIUS_OUTLIER = extent / 100
+RADIUS_OUTLIER = extent / 80
 
 print("VOXEL_SIZE:", VOXEL_SIZE)
 print("NORMAL_RADIUS:", NORMAL_RADIUS)
@@ -92,7 +92,7 @@ print("After voxel:", len(pcd.points))
 # ============================================================
 
 pcd, ind = pcd.remove_statistical_outlier(
-    nb_neighbors=20,
+    nb_neighbors=10,
     std_ratio=10
 )
 
@@ -103,7 +103,7 @@ print("After statistical:", len(pcd.points))
 # ============================================================
 
 pcd, ind = pcd.remove_radius_outlier(
-    nb_points=8,
+    nb_points=10,
     radius=RADIUS_OUTLIER
 )
 
@@ -148,7 +148,7 @@ print("Normals oriented.")
 labels = np.array(
     pcd.cluster_dbscan(
         eps=DBSCAN_EPS,
-        min_points=20,
+        min_points=15,
         print_progress=True
     )
 )

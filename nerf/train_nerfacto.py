@@ -27,6 +27,7 @@ from pathlib import Path
 root = "dataset"
 subset = "All_faces_sculpted_derivatives"
 example = "90_1920x1080_relief_heightmap_1_all_cone.obj"
+example_short = "1_all_cone"
 
 # Combine into full path
 datapath = Path(root) / subset / example
@@ -34,7 +35,7 @@ datapath = Path(root) / subset / example
 print("Full datapath:", datapath)
 
 # Construct experiment name as subset/example
-experiment_name = f"{subset}/{example}"
+experiment_name = f"{subset}/{example_short}"
 
 dataparser_config = ColmapDataParserConfig(
     data=datapath,
@@ -56,10 +57,11 @@ config = TrainerConfig(
     project_name="shrec_1_nerfacto",
     method_name="nerfacto",
     timestamp = "",
-    output_dir=Path("nerf/outputs/"),
+    output_dir=Path("nerf/nerfacto_outputs/"),
     # steps_per_eval_batch=20,
-    steps_per_eval_image=200,
-    max_num_iterations=10000, 
+    steps_per_eval_image=500,
+    max_num_iterations=15000, 
+    save_only_latest_checkpoint=False,
     mixed_precision=True,
     pipeline=VanillaPipelineConfig(
         datamanager=VanillaDataManagerConfig(
@@ -72,7 +74,7 @@ config = TrainerConfig(
             far_plane=6,
             proposal_initial_sampler="uniform",
             eval_num_rays_per_chunk=8192,
-            average_init_density=0.07,
+            average_init_density=0.01,
             camera_optimizer=CameraOptimizerConfig(mode="off"),
             background_color="white", 
         ),

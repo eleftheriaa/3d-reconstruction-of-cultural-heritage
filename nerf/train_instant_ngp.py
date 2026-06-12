@@ -47,12 +47,12 @@ for obj_path in object_folders:
 
     datapath = obj_path
 
-    experiment_name = f"{subset}_inpaint"
+    experiment_name = f"{subset}"
 
     # --- Dataparser ---
     dataparser_config = ColmapDataParserConfig(
         data=datapath,
-        images_path = Path("inpainting_images"),
+        # images_path = Path("inpainting_images"),
         scale_factor=1.0,
         scene_scale=1.0,
         downscale_factor=1,
@@ -68,11 +68,11 @@ for obj_path in object_folders:
     # --- Full config ---
     config = TrainerConfig(
         experiment_name=experiment_name,
-        project_name="shrec_1_instant_ngp_masked",
-        method_name= f'{obj_path.name}',
+        project_name="shrec_instant-ngp",
+        method_name= "instant-ngp",
         timestamp = "",
-        output_dir=Path("nerf/outputs/"),
-        steps_per_eval_image=200,
+        output_dir=Path("nerf/instant_ngp_outputs/"),
+        steps_per_eval_image=500,
         steps_per_save=1000,
         save_only_latest_checkpoint=False,
         max_num_iterations=15000,
