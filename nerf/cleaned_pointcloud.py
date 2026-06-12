@@ -3,13 +3,9 @@ from pathlib import Path
 import yaml
 import numpy as np
 
-# 2026-04-02_001758
-# outputs\instant-ngp-scene-scale05-grid-1\2048\2026-05-21_164829
-# G:\elefth\shrec\eythimis\outputs\dataset\nerfacto\2026-04-02_110514\config.yml
-# "G:\elefth\NeRF\3d-reconstruction-of-cultural-heritage\splatfacto\All_faces_sculpted_primitive\90_1920x1080_relief_heightmap_1_all.obj\config.yml"
-config_file = Path("outputs\All_faces_sculpted_derivatives\90_1920x1080_relief_heightmap_1_all_cone.obj\config.yml")
+config_file = Path("nerf/nerfacto_outputs/All_faces_sculpted_derivatives/1_all_cone/nerfacto/config.yml")
 config = yaml.load(config_file.read_text(), Loader=yaml.Loader)   
-config.load_dir = Path("outputs\All_faces_sculpted_derivatives\90_1920x1080_relief_heightmap_1_all_cone.obj/nerfstudio_models/")
+config.load_dir = Path("nerf/nerfacto_outputs/All_faces_sculpted_derivatives/1_all_cone/nerfacto/nerfstudio_models/")
 # config.load_step = None
 config.print_to_terminal()    
 
@@ -178,8 +174,8 @@ else:
 # ============================================================
 
 output_path = Path(
-    "nerf/pcds/instant-ngp/All_faces_sculpted_derivatives/"
-    "90_1920x1080_relief_heightmap_1_all_cone_clean.ply"
+    "nerf/pcds/nerfacto/"
+    "1_all_cone_clean.ply"
 )
 
 o3d.io.write_point_cloud(str(output_path), pcd)

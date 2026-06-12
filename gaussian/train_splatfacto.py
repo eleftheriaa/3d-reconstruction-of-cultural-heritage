@@ -47,20 +47,20 @@ for obj_path in object_folders:
     )
     # --- Full config ---
     config = TrainerConfig(
-        experiment_name=experiment_name + f"_{obj_path.name}",
+        experiment_name= experiment_name + f"_{obj_path.name}",
         method_name= "splatfacto",
         project_name = "shrec_1_splatfacto",
         output_dir =Path("gaussian/outputs/"),
         timestamp = "",
         # steps_per_eval_batch=0,
-        steps_per_eval_image=1000,
+        steps_per_eval_image=500,
         steps_per_save=1000,
         # steps_per_eval_all_images=1000,
         max_num_iterations=15000,
         mixed_precision=False,
         use_grad_scaler=False,
         save_only_latest_checkpoint=True,
-        vis="wandb",
+        vis="viewer+wandb",
 
         # viewer=ViewerConfig(
         #     websocket_port_default=7007,
@@ -210,6 +210,6 @@ for obj_path in object_folders:
 
     # using the cli
 
-    # ns-train splatfacto --project-name shrec_1_splatfacto --method_name 90_1920x1080_relief_heightmap_1_all.obj --experiment-name All_faces_sculpted_primitive --timestamp "" --pipeline.model.background-color white --pipeline.model.random-init True colmap --data dataset/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all.obj --load-3D-points False --auto-scale-poses False --downscale-factor 1
+    # ns-train splatfacto --project-name shrec_1_splatfacto --method_name splatfacto --experiment-name All_faces_sculpted_primitive --timestamp "" --pipeline.model.background-color white --pipeline.model.random-init True colmap --data dataset/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all.obj --load-3D-points False --auto-scale-poses False --downscale-factor 1
 
     # ns-export gaussian-splat --load-config splatfacto/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all.obj/config.yml --output-dir exports/splatfacto/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all.obj

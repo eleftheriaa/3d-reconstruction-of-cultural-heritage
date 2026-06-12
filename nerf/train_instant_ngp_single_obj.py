@@ -33,12 +33,12 @@ dataparser_config = ColmapDataParserConfig(
 
 # --- Full config ---
 config = TrainerConfig(
-    experiment_name="1_all_cone",
+    experiment_name="All_faces_sculpted_derivatives/1_all_cone",
     project_name="shrec",
     method_name= "instant-ngp",
     timestamp = "",
     output_dir=Path("nerf/instant_ngp_outputs/"),
-    steps_per_eval_image=1000,
+    steps_per_eval_image=500,
     steps_per_save=500,
     save_only_latest_checkpoint=False,
     max_num_iterations=15000,
@@ -80,7 +80,7 @@ config = TrainerConfig(
             ),
             "scheduler": ExponentialDecaySchedulerConfig(
                 lr_final=1e-4,
-                max_steps=20000
+                max_steps=15000
             ),
         }
     },
