@@ -118,7 +118,7 @@ def process_directory(input_dir: str,
         img_array = np.array(img, dtype=np.uint8)
         mask      = create_mask(img_array, bg_threshold, sat_threshold, min_obj_width, erode)
 
-        out_file = output_path / (img_path.stem + "_mask.png")
+        out_file = output_path / (img_path.stem + ".png")
         Image.fromarray(mask, mode="L").save(out_file)
 
     print(f"Done! Masks saved to: {output_path.resolve()}")
