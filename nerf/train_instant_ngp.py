@@ -1,24 +1,3 @@
-# load_dir=Path("outputs\instant-ngp\2048\2026-05-21_102256\nerfstudio_models"),
-# load_step=5000,
-# C:\Users\vvr\anaconda3\Scripts\activate.bat nerfstudio
-# cd /d G:/elefth/shrec/instant-ngp
-from pathlib import Path
-
-folder = Path(
-    "dataset/All_faces_sculpted_derivatives/"
-    "90_1920x1080_relief_heightmap_1_all_cone.obj/"
-    "inpainting_images"
-)
-
-files = sorted(folder.glob("*.png"))
-
-print(len(files))
-
-for f in files[-10:]:
-    print(f.name)
-
-
-from pathlib import Path
 
 from nerfstudio.configs.base_config import ViewerConfig
 from nerfstudio.data.datamanagers.base_datamanager import VanillaDataManagerConfig
@@ -28,10 +7,12 @@ from nerfstudio.engine.schedulers import ExponentialDecaySchedulerConfig
 from nerfstudio.engine.trainer import TrainerConfig
 from nerfstudio.models.instant_ngp import InstantNGPModelConfig
 from nerfstudio.pipelines.base_pipeline import VanillaPipelineConfig
+from pathlib import Path
 
 # Root dataset folder
 root = Path("dataset")
-subset = "All_faces_sculpted_derivatives"
+subset = "All_faces_sculpted_derivatives"  # Subset containing the objects to train on
+subset_short_name = "1_d"
 
 # Folder containing all objects
 subset_path = root / subset
@@ -46,13 +27,14 @@ for obj_path in object_folders:
     print(f"\nTraining object: {obj_path.name}")
 
     datapath = obj_path
+    short_name = "_".join(obj_path.name.replace(".obj", "").split("_")[4:])
 
-    experiment_name = f"{subset}"
+    experiment_name = f"{subset_short_name}" + f"/{short_name}"
 
     # --- Dataparser ---
     dataparser_config = ColmapDataParserConfig(
         data=datapath,
-        # images_path = Path("inpainting_images"),
+        # images_path = Path("inpainted_images"),
         scale_factor=1.0,
         scene_scale=1.0,
         downscale_factor=1,
@@ -68,10 +50,10 @@ for obj_path in object_folders:
     # --- Full config ---
     config = TrainerConfig(
         experiment_name=experiment_name,
-        project_name="shrec_instant-ngp",
+        project_name="instant-ngp_1",
         method_name= "instant-ngp",
         timestamp = "",
-        output_dir=Path("nerf/instant_ngp_outputs/"),
+        # output_dir=Path("nerf/instant_ngp_outputs/"),
         steps_per_eval_image=500,
         steps_per_save=1000,
         save_only_latest_checkpoint=False,
