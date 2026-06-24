@@ -22,6 +22,17 @@ def parse_args():
         description="Inpaint saturated regions in images."
     )
     p.add_argument(
+        "--input",
+        required=True,
+        help="Input directory containing images and masks"
+    )
+    p.add_argument(
+        "--masks",
+        required=True,
+        default="saturated_masks",
+        help="Suffix for mask files (default: _saturated_mask.png)"
+    )
+    p.add_argument(
         "--output",
         required=True,
         help="Output directory for inpainted images"
@@ -35,24 +46,22 @@ if __name__ == "__main__":
     output_path = Path(args.output)
     output_path.mkdir(parents=True, exist_ok=True)
 
+    input_path = Path(args.input)
+    masks_path = Path(args.masks)
+
+    print(f"Input images: {input_path}")
+    print(f"Input masks: {masks_path}")
+
     for i in range(90):
+        single_image_path = input_path / f"frame_{i+1:03d}.png"
+        single_mask_path = masks_path / f"frame_{i+1:03d}.png"
 
-        image_path = (
-            "dataset/All_faces_sculpted_derivatives/"
-            "90_1920x1080_relief_heightmap_1_all_cone.obj/"
-            f"images/frame_{i+1:03d}.png"
-        )
-
-        mask_path = (
-            "dataset/All_faces_sculpted_derivatives/"
-            "90_1920x1080_relief_heightmap_1_all_cone.obj/"
-            f"saturated_masks/frame_{i+1:03d}.png"
-        )
-
-        image = cv2.imread(image_path)
+        # print(single_image_path)
+        # print(single_mask_path)
+        image = cv2.imread(single_image_path)
 
         # IMPORTANT: load mask as grayscale
-        mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+        mask = cv2.imread(single_mask_path, cv2.IMREAD_GRAYSCALE)
 
         if image is None:
             print(f"Frame {i+1:03d}: image not found")
@@ -79,7 +88,7 @@ if __name__ == "__main__":
         # guarantee no masked pixel remains at 255
         inpainted_image[mask > 0] = np.minimum(
             inpainted_image[mask > 0],
-            235
+            245
         )
 
         max_masked_value = inpainted_image[mask > 0].max()
