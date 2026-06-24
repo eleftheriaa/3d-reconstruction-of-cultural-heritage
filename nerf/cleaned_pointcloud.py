@@ -3,9 +3,9 @@ from pathlib import Path
 import yaml
 import numpy as np
 
-config_file = Path("nerf/nerfacto_outputs/All_faces_sculpted_derivatives/1_all_cone/nerfacto/config.yml")
+config_file = Path("outputs/1_d/1_all_egg/instant-ngp/config.yml")
 config = yaml.load(config_file.read_text(), Loader=yaml.Loader)   
-config.load_dir = Path("nerf/nerfacto_outputs/All_faces_sculpted_derivatives/1_all_cone/nerfacto/nerfstudio_models/")
+config.load_dir = Path("outputs/1_d/1_all_egg/instant-ngp/nerfstudio_models/")
 # config.load_step = None
 config.print_to_terminal()    
 
@@ -144,7 +144,7 @@ print("Normals oriented.")
 labels = np.array(
     pcd.cluster_dbscan(
         eps=DBSCAN_EPS,
-        min_points=15,
+        min_points=10,
         print_progress=True
     )
 )
@@ -174,8 +174,8 @@ else:
 # ============================================================
 
 output_path = Path(
-    "nerf/pcds/nerfacto/"
-    "1_all_cone_clean.ply"
+    "pcds/instant_ngp/"
+    "1_all_egg.ply"
 )
 
 o3d.io.write_point_cloud(str(output_path), pcd)

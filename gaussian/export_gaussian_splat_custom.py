@@ -6,12 +6,12 @@ from nerfstudio.data.scene_box import OrientedBox
 from nerfstudio.scripts.exporter import ExportGaussianSplat
 
 
-config_file = Path("gaussian/outputs/All_faces_sculpted_derivatives_90_1920x1080_relief_heightmap_1_all_cone.obj/splatfacto/config.yml")
+config_file = Path("outputs/1_d/1_all_pyramid/splatfacto/lama/config.yml")
 print("Looking for:", config_file)
 print("Absolute path:", config_file.resolve())
 print("Exists:", config_file.exists())
 config = yaml.load(config_file.read_text(), Loader=yaml.Loader)   
-# config.load_dir = Path("gaussian/outputs/All_faces_sculpted_derivatives_90_1920x1080_relief_heightmap_1_all_cone.obj/splatfacto/nerfstudio_models")
+# config.load_dir = Path("gaussian/outputs/All_faces_sculpted_derivatives_90_1920x1080_relief_heightmap_1_all_cylinder.obj/splatfacto/nerfstudio_models")
 # config.load_step = None
 config.print_to_terminal()    
 
@@ -37,9 +37,9 @@ obb_scale    = tuple(float(v) for v in half_extent )     # full extent = (2.0, 2
 
 # --- Run the exporter ---
 exporter = ExportGaussianSplat(
-    output_filename= "1_all_cone_sh_coeffs.ply",
+    output_filename= "1_all_pyramid.ply",
     load_config=trainer.config.get_base_dir() / "config.yml",
-    output_dir=Path("gaussian\exports\splats"),
+    output_dir=Path("splats\lama"),
     obb_center=obb_center,
     obb_rotation=obb_rotation,
     obb_scale=obb_scale,

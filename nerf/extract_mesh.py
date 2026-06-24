@@ -23,7 +23,7 @@ import torch
 # ============================================================
  
 pcd_path = Path(
-    "gaussian/exports/splats/1_all_cone.ply"
+    "nerf/pcds/instant-ngp/1_all_maskclean.ply"
 )
  
 print(f"Loading point cloud from: {pcd_path}")
@@ -66,7 +66,7 @@ else:
  
 print("\n--- Poisson reconstruction (depth=9) ---")
  
-poisson_dir = Path("gaussian/exports/splats")
+poisson_dir = Path("nerf/meshes/instant-ngp")
 poisson_dir.mkdir(parents=True, exist_ok=True)
  
 poisson_mesh, densities = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(
@@ -80,7 +80,7 @@ poisson_mesh.remove_vertices_by_mask(~keep)
  
 print(f"Poisson mesh: {len(poisson_mesh.vertices):,} vertices, {len(poisson_mesh.triangles):,} faces")
  
-poisson_out = poisson_dir / "1_all_cone_poisson.ply"
+poisson_out = poisson_dir / "1_all_mask_clean_poisson.ply"
 o3d.io.write_triangle_mesh(str(poisson_out), poisson_mesh)
 print(f"Saved → {poisson_out}")
  

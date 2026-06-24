@@ -9,13 +9,14 @@ from nerfstudio.engine.schedulers import ExponentialDecaySchedulerConfig
 from nerfstudio.engine.trainer import TrainerConfig
 from nerfstudio.models.splatfacto import SplatfactoModelConfig
 from nerfstudio.pipelines.base_pipeline import VanillaPipelineConfig
-
+from splatfacto_depth import SplatfactoModelWithDepthConfig
 # --- Dataparser ---
 # NOTE: splatfacto works best with COLMAP points for Gaussian initialization.
 # The ColmapDataParserConfig will automatically load 3D points if available.
 
 root = Path("dataset")
 subset = "All_faces_sculpted_derivatives"
+subset_short_name = "1_d"
 
 # Folder containing all objects
 subset_path = root / subset
@@ -30,28 +31,28 @@ for obj_path in object_folders:
     print(f"\nTraining object: {obj_path.name}")
 
     datapath = obj_path
+    short_name = "_".join(obj_path.name.replace(".obj", "").split("_")[4:])
 
-    experiment_name = f"{subset}"
-
+    experiment_name = f"{subset_short_name}" + f"/{short_name}"
 
 
     dataparser_config = ColmapDataParserConfig(
         data=datapath,
+        images_path = Path("images_lama"),
         scale_factor=1.0,
         scene_scale=1.0,
         downscale_factor=1,
-        load_3D_points=False,           # important: seeds Gaussians from SfM points
+        load_3D_points=True,           # important: seeds Gaussians from SfM points
         orientation_method="none",
         center_method="none",
         auto_scale_poses=False,
     )
     # --- Full config ---
     config = TrainerConfig(
-        experiment_name= experiment_name + f"_{obj_path.name}",
+        experiment_name= experiment_name  ,
         method_name= "splatfacto",
-        project_name = "shrec_1_splatfacto",
-        output_dir =Path("gaussian/outputs/"),
-        timestamp = "",
+        project_name = "splatfacto_1",
+        timestamp = "lama",
         # steps_per_eval_batch=0,
         steps_per_eval_image=500,
         steps_per_save=1000,
@@ -60,19 +61,8 @@ for obj_path in object_folders:
         mixed_precision=False,
         use_grad_scaler=False,
         save_only_latest_checkpoint=True,
-        vis="viewer+wandb",
+        vis="wandb",
 
-        # viewer=ViewerConfig(
-        #     websocket_port_default=7007,
-        #     num_rays_per_chunk=32768,
-        #     max_num_display_images=512,
-        #     quit_on_train_completion=False,
-        #     image_format="jpeg",
-        #     jpeg_quality=75,
-        #     make_share_url=False,
-        #     camera_frustum_scale=0.1,
-        #     default_composite_depth=True,
-        # ),
 
         pipeline=VanillaPipelineConfig(
 
@@ -92,7 +82,7 @@ for obj_path in object_folders:
                 fps_reset_every=100,
             ),
 
-            model=SplatfactoModelConfig(
+            model=SplatfactoModelWithDepthConfig(
                 warmup_length=500,
                 refine_every=100,
                 resolution_schedule=3000,
@@ -108,15 +98,15 @@ for obj_path in object_folders:
                 cull_screen_size=0.15,
                 split_screen_size=0.05,
                 stop_screen_size_at=4000,
-                random_init=True,
-                num_random=50000,
-                random_scale=10.0,
+                random_init=False,
+                # num_random=50000,
+                # random_scale=10.0,
                 ssim_lambda=0.2,
                 stop_split_at=30000,
                 sh_degree=3,
                 use_scale_regularization=True,
                 max_gauss_ratio=10.0,
-                output_depth_during_training=False,
+                output_depth_during_training=True,
                 rasterize_mode="classic",          # or "antialiased"
                 camera_optimizer=CameraOptimizerConfig(
                     mode="off",                    # set to "SO3xR3" to enable camera opt
@@ -208,8 +198,10 @@ for obj_path in object_folders:
 
 
 
-    # using the cli
+# using the cli
 
-    # ns-train splatfacto --project-name shrec_1_splatfacto --method_name splatfacto --experiment-name All_faces_sculpted_primitive --timestamp "" --pipeline.model.background-color white --pipeline.model.random-init True colmap --data dataset/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all.obj --load-3D-points False --auto-scale-poses False --downscale-factor 1
+# ns-train splatfacto --project-name splatfacto_1 --method_name splatfacto --experiment-name 1_d/1_all_sphere --timestamp "" --pipeline.model.background-color white --pipeline.model.random-init True colmap --data dataset/All_faces_sculpted_derivatives/90_1920x1080_relief_heightmap_1_all_sphere.obj --load-3D-points False --auto-scale-poses False --downscale-factor 1
 
-    # ns-export gaussian-splat --load-config splatfacto/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all.obj/config.yml --output-dir exports/splatfacto/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all.obj
+# ns-render dataset  --load-config gaussian\outputs\All_faces_sculpted_derivatives\1_all_cone_mask\splatfacto\config.yml --output-path gaussian/renders_m --rendered-output-names depth 
+
+# ns-export gaussian-splat --load-config splatfacto/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all.obj/config.yml --output-dir exports/splatfacto/All_faces_sculpted_primitive/90_1920x1080_relief_heightmap_1_all.obj

@@ -18,7 +18,8 @@ from nerfstudio.pipelines.base_pipeline import VanillaPipelineConfig
 
 # --- Dataparser ---
 dataparser_config = ColmapDataParserConfig(
-    data=Path("dataset/All_faces_sculpted_derivatives/90_1920x1080_relief_heightmap_1_all_cone.obj"),
+    data=Path("dataset/All_faces_sculpted_derivatives/90_1920x1080_relief_heightmap_1_all_sphere.obj"),
+    # images_path=Path("inpainted_images"),
     scale_factor=1.0,
     scene_scale=1.0,
     downscale_factor=1,
@@ -33,11 +34,10 @@ dataparser_config = ColmapDataParserConfig(
 
 # --- Full config ---
 config = TrainerConfig(
-    experiment_name="All_faces_sculpted_derivatives/1_all_cone",
-    project_name="shrec",
+    experiment_name="1_d/1_all_sphere",
+    project_name="instant-ngp_1",
     method_name= "instant-ngp",
     timestamp = "",
-    output_dir=Path("nerf/instant_ngp_outputs/"),
     steps_per_eval_image=500,
     steps_per_save=500,
     save_only_latest_checkpoint=False,
@@ -89,7 +89,7 @@ config = TrainerConfig(
 # --- Setup and train ---
 # config.set_timestamp()
 config.pipeline.model.device = "cuda"
-config.pipeline.datamanager.dataparser.data = Path("dataset/All_faces_sculpted_derivatives/90_1920x1080_relief_heightmap_1_all_cone.obj")  # redundant but explicit
+config.pipeline.datamanager.dataparser.data = Path("dataset/All_faces_sculpted_derivatives/90_1920x1080_relief_heightmap_1_all_sphere.obj")  # redundant but explicit
 config.save_config()
 
 trainer = config.setup(local_rank=0, world_size=1)
