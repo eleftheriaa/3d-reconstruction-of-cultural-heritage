@@ -6,6 +6,6 @@
 *.log
 *.yml
 *.wandb
-
+*.pdf
 dataset/
 outputs/
